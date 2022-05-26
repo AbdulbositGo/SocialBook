@@ -1,0 +1,125 @@
+{% load static %}
+
+ <style>
+    .popUp{
+        position: fixed;
+        bottom: 30px;
+        right: 20px;
+        width:320px;
+        border-radius:5px;
+        border: 0.5px solid #6c757d;
+        padding: 0px 0.5px;
+        display: none;
+        transform: scale(0);
+    }
+    .popUp-active{
+        display: block;
+        animation: popUp 0.8s linear forwards !important;
+    }
+    .box{
+        display:flex; justify-content:center; align-items:center;gap: 10px;
+    }
+    .popUp__item-1{
+        display: flex;justify-content: space-between;align-items: center;
+        padding: 0px 10px;
+    }
+    .box__item{
+        width:20px;height:20px; background-color:red; border-radius:5px;
+    }
+    .box-h1{
+        font-size:1.1rem;font-weight: bolder;color:#6c757d;
+    }
+    .box-p{
+        color:grey;
+        font-weight: 600;
+        font-size: 0.875em;
+    }
+    .popUp-img{
+        width: 1.3em;
+        height: 1.3em;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: all 0.3s ease-in-out;
+    }
+    .popUp-img:hover{
+        opacity: 0.8;
+    }
+    .popUp__item-2{
+        border-radius:5px;
+        padding: 12px;
+        background-color: rgb(237, 232, 232);
+    }
+    .popUp__item-2 p{
+        margin: 0px;
+        padding: 0px;
+        font-size: 0.875rem;
+        letter-spacing: 1.5px;
+    }
+    @keyframes popUp {
+        0%{
+            transform: scale(0);
+        }
+        50%{
+            transform: scale(0.8);
+        }
+        80%{
+            transform: scale(0.5);
+        }
+        100%{
+            transform: scale(1);
+        }
+    }
+</style>
+
+{% for message in messages %}
+    <div class="popUp popUp-active">
+        <div class="popUp__item-1">
+            <div class="box">
+                <div class="box__item" ></div>
+                <h1 class="box-h1" >Danger</h1>
+            </div> 
+            <div class="box">
+                <img class="popUp-img" src="{% static 'images/x-button.jpg' %}" alt="x">
+            </div>
+        </div>
+        <div class="popUp__item-2">
+            <p>{{ message }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+    let exitImg = document.querySelector('.popUp-img');
+    let popUp = document.querySelector('.popUp');
+    let time_exit = document.querySelector('.time');
+    let timeInterval;
+    let count=1;
+    let animet =0;
+    function popUpNone(){
+        if(popUp.classList.contains('popUp-active')){
+           let interval = setInterval(function(){
+               animet+=0.01
+                count-=animet
+                popUp.style.opacity = count;
+                if(count < 0){
+                    popUp.style.display='none'
+                    clearInterval(interval)
+                }
+            },15)
+        }
+    }
+    exitImg.addEventListener('click',function(){
+       popUpNone()
+    })
+    setTimeout(function(){
+        popUp.classList.remove("popUp-active")
+    },5000)
+</script>
+
+
+
+{% comment %} 
+<p uk-margin>
+    {% for message in messages %}
+    {% endfor %}
+</p> {% endcomment %}
